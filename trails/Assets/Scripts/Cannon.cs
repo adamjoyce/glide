@@ -7,14 +7,21 @@ public class Cannon : MonoBehaviour
     public GameObject cannonBall;           // The gameobject that will be fired when space is pressed.
     public GameObject cannon;               // The gameobject the projectiles will originate from.
     public float shootForce = 0.0f;         // The initial force applied to the cannonball.
+    public float shotDelay = 1.0f;          // The time that needs to pass before another shot can be taken.
+
+    private float nextFireTime = 0.0f;      // The next time increment at which another cannonball may be fired.
 
     /* Update is called once per frame. */
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Space))
+        if ((Time.time >= nextFireTime) && Input.GetKeyDown(KeyCode.Space))
         {
+            // Spawn and shoot the cannonball.
             GameObject projectile = Instantiate(cannonBall, cannon.transform.position, transform.rotation);
             projectile.GetComponent<Rigidbody>().AddForce(projectile.transform.forward * shootForce);
+
+            // Update when the cannon can next fire.
+            nextFireTime = Time.time + shotDelay;
         }
     }
 }
