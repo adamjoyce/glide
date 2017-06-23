@@ -6,7 +6,7 @@ public class Cannon : MonoBehaviour
 {
     public GameObject cannonBall;           // The gameobject that will be fired when space is pressed.
     public GameObject cannon;               // The gameobject the projectiles will originate from.
-    public float shootForce = 0.0f;         // The initial force applied to the cannon ball.
+    public float shootForce = 0.0f;         // The initial force applied to the cannonball.
 
     /* Update is called once per frame. */
     void Update()
