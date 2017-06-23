@@ -18,11 +18,11 @@ public class Meteor : MonoBehaviour
         impactZoneSize = impactZone.GetComponent<BoxCollider>().bounds.size;
         meteorMesh = transform.GetChild(0);
 
-        // Assumes that the impact zone as equal dimensions and is centred at the world origin.
+        // Assumes that the impact zone as equal dimensions.
         float halfImpactZoneSize = impactZoneSize.x * 0.5f;
-        targetImpactLocation = new Vector3(Random.Range(-halfImpactZoneSize, halfImpactZoneSize),
-                                           Random.Range(-halfImpactZoneSize, halfImpactZoneSize),
-                                           Random.Range(-halfImpactZoneSize, halfImpactZoneSize));
+        targetImpactLocation = new Vector3(Random.Range(-halfImpactZoneSize, halfImpactZoneSize) + impactZone.transform.position.x,
+                                           Random.Range(-halfImpactZoneSize, halfImpactZoneSize) + impactZone.transform.position.y,
+                                           Random.Range(-halfImpactZoneSize, halfImpactZoneSize) + impactZone.transform.position.z);
     }
 
     /* Update is called once per frame. */
