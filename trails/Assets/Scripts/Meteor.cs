@@ -6,9 +6,7 @@ public class Meteor : MonoBehaviour
 {
     public GameObject impactZone;           // The centre of the area the meteor will aim towards.
     public float movementSpeed = 5.0f;      // The speed the meteor will travel at.
-    public float rotationSpeed = 90.0f;     // The speed at which the meteor rotates.
 
-    private Transform meteorMesh;          // The meteor's mesh that is visible in the scene.
     private Vector3 impactZoneSize;         // The dimensions of the box collider on the impact zone gameobject.
     private Vector3 targetImpactLocation;   // The target location the meteor will aim for.
 
@@ -16,13 +14,16 @@ public class Meteor : MonoBehaviour
     private void Start()
     {
         impactZoneSize = impactZone.GetComponent<BoxCollider>().bounds.size;
-        meteorMesh = transform.GetChild(0);
 
-        // Assumes that the impact zone as equal dimensions.
-        float halfImpactZoneSize = impactZoneSize.x * 0.5f;
-        targetImpactLocation = new Vector3(Random.Range(-halfImpactZoneSize, halfImpactZoneSize) + impactZone.transform.position.x,
-                                           Random.Range(-halfImpactZoneSize, halfImpactZoneSize) + impactZone.transform.position.y,
-                                           Random.Range(-halfImpactZoneSize, halfImpactZoneSize) + impactZone.transform.position.z);
+        // Half values to correctly calculate a position within the impact zone bounds.
+        float halfImpactZoneSizeX = impactZoneSize.x * 0.5f;
+        float halfImpactZoneSizeY = impactZoneSize.y * 0.5f;
+        float halfImpactZoneSizeZ = impactZoneSize.z * 0.5f;
+
+        // Generate the target location within the impact zone and face the meteor towards it.
+        targetImpactLocation = new Vector3(Random.Range(-halfImpactZoneSizeX, halfImpactZoneSizeX) + impactZone.transform.position.x,
+                                           Random.Range(-halfImpactZoneSizeY, halfImpactZoneSizeY) + impactZone.transform.position.y,
+                                           Random.Range(-halfImpactZoneSizeZ, halfImpactZoneSizeZ) + impactZone.transform.position.z);
         transform.LookAt(targetImpactLocation);
     }
 
@@ -30,7 +31,6 @@ public class Meteor : MonoBehaviour
     private void Update()
     {
         transform.position = Vector3.MoveTowards(transform.position, targetImpactLocation, movementSpeed * Time.deltaTime);
-        meteorMesh.RotateAround(meteorMesh.position, -Vector3.right, rotationSpeed * Time.deltaTime);
     }
 
     /* What happens when something collides with this object. */
