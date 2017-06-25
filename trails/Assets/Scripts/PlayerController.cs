@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class CameraController : MonoBehaviour
+public class PlayerController : MonoBehaviour
 {
     public float mouseSensitivity = 5;          // How sensitive the camera movement will be.
     public float lookSmoothDamp = 0.1f;         // The time it will take for the camera to reach the desired mouse position.
