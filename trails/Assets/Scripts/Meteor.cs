@@ -13,22 +13,14 @@ public class Meteor : MonoBehaviour
     /* Use this for initialization. */
     private void Start()
     {
+        // Attempt to get a reference to the impact zone if it is not set.
         if (!impactZone)
         {
             impactZone = GameObject.Find("ImpactZone");
         }
 
-        impactZoneSize = impactZone.GetComponent<BoxCollider>().bounds.size;
-
-        // Half values to correctly calculate a position within the impact zone bounds.
-        float halfImpactZoneSizeX = impactZoneSize.x * 0.5f;
-        float halfImpactZoneSizeY = impactZoneSize.y * 0.5f;
-        float halfImpactZoneSizeZ = impactZoneSize.z * 0.5f;
-
         // Generate the target location within the impact zone and face the meteor towards it.
-        targetImpactLocation = new Vector3(Random.Range(-halfImpactZoneSizeX, halfImpactZoneSizeX) + impactZone.transform.position.x,
-                                           Random.Range(-halfImpactZoneSizeY, halfImpactZoneSizeY) + impactZone.transform.position.y,
-                                           Random.Range(-halfImpactZoneSizeZ, halfImpactZoneSizeZ) + impactZone.transform.position.z);
+        targetImpactLocation = RandomPointInZone.GetRandomPointInZone(impactZone);
         transform.LookAt(targetImpactLocation);
     }
 
