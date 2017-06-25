@@ -13,6 +13,11 @@ public class Meteor : MonoBehaviour
     /* Use this for initialization. */
     private void Start()
     {
+        if (!impactZone)
+        {
+            impactZone = GameObject.Find("ImpactZone");
+        }
+
         impactZoneSize = impactZone.GetComponent<BoxCollider>().bounds.size;
 
         // Half values to correctly calculate a position within the impact zone bounds.
