@@ -34,6 +34,7 @@ public class Meteor : MonoBehaviour, IDamageable<float>, IKillable
         transform.position = Vector3.MoveTowards(transform.position, targetImpactLocation, movementSpeed * Time.deltaTime);
     }
 
+    /* Dies if the damage taken reduces hits point to or below zero. */
     public void TakeDamage(float damageAmount)
     {
         currentHealth -= damageAmount;

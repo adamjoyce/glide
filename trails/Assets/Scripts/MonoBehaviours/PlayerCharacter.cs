@@ -32,6 +32,7 @@ public class PlayerCharacter : MonoBehaviour, IDamageable<float>, IKillable
         }
     }
 
+    /* Dies if the damage taken reduces hits point to or below zero. */
     public void TakeDamage(float damageAmount)
     {
         currentHealth -= damageAmount;
