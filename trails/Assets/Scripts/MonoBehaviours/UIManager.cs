@@ -33,6 +33,16 @@ public class UIManager : MonoBehaviour
         Debug.Log(Cursor.lockState);
     }
 
+    /* Resumes the game and hides the pause menu. */
+    public void HidePauseMenu()
+    {
+        Time.timeScale = 1.0f;
+        background.SetActive(false);
+        pauseMenu.SetActive(false);
+        isPaused = false;
+        Cursor.lockState = CursorLockMode.Locked;
+    }
+
     /* Pauses the game and displays the pause menu. */
     private void ShowPauseMenu()
     {
@@ -41,15 +51,5 @@ public class UIManager : MonoBehaviour
         pauseMenu.SetActive(true);
         isPaused = true;
         Cursor.lockState = CursorLockMode.None;
-    }
-
-    /* Resumes the game and hides the pause menu. */
-    private void HidePauseMenu()
-    {
-        Time.timeScale = 1.0f;
-        background.SetActive(false);
-        pauseMenu.SetActive(false);
-        isPaused = false;
-        Cursor.lockState = CursorLockMode.Locked;
     }
 }
