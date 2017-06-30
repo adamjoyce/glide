@@ -6,7 +6,7 @@ public class PlayerController : MonoBehaviour
 {
     public float mouseSensitivity = 5;          // How sensitive the camera movement will be.
     public float lookSmoothDamp = 0.1f;         // The time it will take for the camera to reach the desired mouse position.
-    public bool lockedCursor = true;            // Is the cursor locked to the centre of the screen?
+    //public bool lockedCursor = true;            // Is the cursor locked to the centre of the screen?
 
     private float xRotation;                    // The camera's rotation around the X axis - input from the mouse's Y axis.
     private float yRotation;                    // The camera's rotation around the Y axis - input from the mouse's X axis.
@@ -18,10 +18,10 @@ public class PlayerController : MonoBehaviour
     /* Used for initilisation. */
     private void Start()
     {
-        if (lockedCursor)
-        {
-            Cursor.lockState = CursorLockMode.Locked;
-        }
+        //if (lockedCursor)
+        //{
+        //    Cursor.lockState = CursorLockMode.Locked;
+        //}
     }
 
     /* Called once every frame. */
@@ -29,17 +29,17 @@ public class PlayerController : MonoBehaviour
     {
         // Escape to unlock the cursor from the centre of the screen.
         // LMB (by default) to relock the cursor to the centre of the screen.
-        if (Input.GetKeyDown(KeyCode.Escape) && lockedCursor)
-        {
-            lockedCursor = false;
-        }
-        else if (Input.GetButtonDown("Fire1") && !lockedCursor)
-        {
-            Cursor.lockState = CursorLockMode.Locked;
-            lockedCursor = true;
-        }
+        //if (Input.GetKeyDown(KeyCode.Escape) && lockedCursor)
+        //{
+        //    lockedCursor = false;
+        //}
+        //else if (Input.GetButtonDown("Fire1") && !lockedCursor)
+        //{
+        //    Cursor.lockState = CursorLockMode.Locked;
+        //    lockedCursor = true;
+        //}
 
-        if (lockedCursor)
+        if (Cursor.lockState == CursorLockMode.Locked/*lockedCursor*/)
         {
             // Get the input axis values from the mouse.
             xRotation -= Input.GetAxis("Mouse Y") * mouseSensitivity;
