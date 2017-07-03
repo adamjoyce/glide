@@ -6,8 +6,10 @@ public class UIManager : MonoBehaviour
 {
     public GameObject background;           // The tinted background that is shown when a menu is open.
     public GameObject pauseMenu;            // The pause menu that is displayed when Escape is pressed.
+    public GameObject optionsMenu;          // The options menu displayed when 'Options' is clicked.
 
     private bool isPaused = false;          // Whether or not the game is currently paused.
+    private GameObject openMenu;            // The menu that is currently open.
 
     /* Use this for initialization. */
     void Start()
@@ -22,33 +24,66 @@ public class UIManager : MonoBehaviour
         {
             if (!isPaused)
             {
-                ShowPauseMenu();
-
+                PauseGame();
             }
             else
             {
-                HidePauseMenu();
+                if (openMenu)
+                {
+                    HideMenu(openMenu);
+                }
+                ResumeGame();
             }
         }
     }
 
-    /* Resumes the game and hides the pause menu. */
-    public void HidePauseMenu()
+    /* Resumes the game. */
+    public void ResumeGame()
     {
         Time.timeScale = 1.0f;
-        background.SetActive(false);
-        pauseMenu.SetActive(false);
+        HideMenu(pauseMenu);
         isPaused = false;
         Cursor.lockState = CursorLockMode.Locked;
+        openMenu = null;
     }
 
-    /* Pauses the game and displays the pause menu. */
-    private void ShowPauseMenu()
+    /* Displays the options menu. */
+    public void ShowOptions()
+    {
+        HideMenu(pauseMenu);
+        ShowMenu(optionsMenu);
+        openMenu = optionsMenu;
+    }
+
+    /* Returns to the pause menu from the options menu. */
+    public void BackToPauseMenu()
+    {
+        HideMenu(optionsMenu);
+        ShowMenu(pauseMenu);
+        openMenu = pauseMenu;
+    }
+
+    /* Pauses the game. */
+    private void PauseGame()
     {
         Time.timeScale = 0.0f;
-        background.SetActive(true);
-        pauseMenu.SetActive(true);
+        ShowMenu(pauseMenu);
         isPaused = true;
         Cursor.lockState = CursorLockMode.None;
+        openMenu = pauseMenu;
+    }
+
+    /* Displays a menu. */
+    private void ShowMenu(GameObject menu)
+    {
+        background.SetActive(true);
+        menu.SetActive(true);
+    }
+
+    /* Hides a menu. */
+    private void HideMenu(GameObject menu)
+    {
+        background.SetActive(false);
+        menu.SetActive(false);
     }
 }

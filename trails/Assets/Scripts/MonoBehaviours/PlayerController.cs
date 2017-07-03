@@ -56,4 +56,10 @@ public class PlayerController : MonoBehaviour
             transform.rotation = Quaternion.Euler(currentXRotation, currentYRotation, 0);
         }
     }
+
+    /* Sets the mouse senstivity. */
+    public void SetMouseSensitivity(float sensitivty)
+    {
+        mouseSensitivity = sensitivty;
+    }
 }
