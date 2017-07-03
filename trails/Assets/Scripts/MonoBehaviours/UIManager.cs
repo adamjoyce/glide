@@ -30,7 +30,6 @@ public class UIManager : MonoBehaviour
                 HidePauseMenu();
             }
         }
-        Debug.Log(Cursor.lockState);
     }
 
     /* Resumes the game and hides the pause menu. */
