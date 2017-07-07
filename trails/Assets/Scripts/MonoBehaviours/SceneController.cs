@@ -53,7 +53,7 @@ public class SceneController : MonoBehaviour
         SceneManager.UnloadSceneAsync(SceneManager.GetActiveScene().buildIndex);
 
         // Load the new scene and wait for it to complete before continuing.
-        LoadSceneAndSetActive(sceneName);
+        yield return LoadSceneAndSetActive(sceneName);
 
         // Resolve any subscribed actions necessary immediately after a new scene is loaded.
         if (AfterSceneLoad != null)
