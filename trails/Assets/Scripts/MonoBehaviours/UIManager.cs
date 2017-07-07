@@ -28,10 +28,6 @@ public class UIManager : MonoBehaviour
             }
             else
             {
-                if (openMenu)
-                {
-                    HideMenu(openMenu);
-                }
                 ResumeGame();
             }
         }
@@ -41,7 +37,7 @@ public class UIManager : MonoBehaviour
     public void ResumeGame()
     {
         Time.timeScale = 1.0f;
-        HideMenu(pauseMenu);
+        HideMenu(openMenu);
         isPaused = false;
         Cursor.lockState = CursorLockMode.Locked;
         openMenu = null;
