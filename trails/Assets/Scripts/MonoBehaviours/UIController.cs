@@ -10,6 +10,7 @@ public class UIController : MonoBehaviour
     public GameObject pauseMenu;                // The pause menu that is displayed when Escape is pressed.
     public GameObject optionsMenu;              // The options menu displayed when 'Options' is clicked.
     public GameObject startText;                // The text informing the player to press a button to continue.
+    public GameObject crosshair;                // The crosshair respresenting the centre of the screen.
 
     private bool isPaused = false;              // Whether or not the game is currently paused.
     private GameObject openMenu;                // The menu that is currently open.
@@ -67,9 +68,8 @@ public class UIController : MonoBehaviour
     /* Starts the game. */
     public void PlayGame()
     {
+        sceneController.AfterSceneLoad += MainMenuToGameScene;
         sceneController.FadeAndLoadScene("MeteorStrike");
-        HideMenu(mainMenu);
-        Cursor.lockState = CursorLockMode.Locked;
     }
 
     /* Pauses the game. */
@@ -78,6 +78,7 @@ public class UIController : MonoBehaviour
         Time.timeScale = 0.0f;
         ShowMenu(pauseMenu);
         isPaused = true;
+        crosshair.SetActive(false);
         Cursor.lockState = CursorLockMode.None;
     }
 
@@ -87,7 +88,16 @@ public class UIController : MonoBehaviour
         Time.timeScale = 1.0f;
         HideMenu(openMenu);
         isPaused = false;
+        crosshair.SetActive(true);
         Cursor.lockState = CursorLockMode.Locked;
+    }
+
+    /* Returns to the main menu. */
+    public void ReturnToMainMenu()
+    {
+        Time.timeScale = 1.0f;
+        sceneController.AfterSceneLoad += GameSceneToMainMenu;
+        sceneController.FadeAndLoadScene("SplashScreen");
     }
 
     /* Quits the game. */
@@ -97,5 +107,24 @@ public class UIController : MonoBehaviour
 
         // For exiting the editor.
         UnityEditor.EditorApplication.isPlaying = false;
+    }
+
+    /* Called after loading a new scene from the main menu. */
+    private void MainMenuToGameScene()
+    {
+        HideMenu(mainMenu);
+        Cursor.lockState = CursorLockMode.Locked;
+        crosshair.SetActive(true);
+        sceneController.AfterSceneLoad -= MainMenuToGameScene;
+    }
+
+    /* Called after loading the main menu from a game scene. */
+    private void GameSceneToMainMenu()
+    {
+        HideMenu(openMenu);
+        ShowMenu(mainMenu);
+        Cursor.lockState = CursorLockMode.None;
+        crosshair.SetActive(false);
+        sceneController.AfterSceneLoad -= GameSceneToMainMenu;
     }
 }
