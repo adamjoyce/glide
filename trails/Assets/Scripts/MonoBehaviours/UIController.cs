@@ -69,6 +69,12 @@ public class UIController : MonoBehaviour
     /* Starts the game. */
     public void PlayGame()
     {
+        // Unpause the game world to allow the scene transition.
+        if (Time.timeScale == 0.0f)
+        {
+            Time.timeScale = 1.0f;
+        }
+
         SceneController.AfterSceneLoad += MenuToGameScene;
         sceneController.FadeAndLoadScene("MeteorStrike");
     }
