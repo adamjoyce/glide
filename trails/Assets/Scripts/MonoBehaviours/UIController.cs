@@ -8,7 +8,8 @@ public class UIController : MonoBehaviour
     public GameObject background;               // The tinted background that is shown when a menu is open.
     public GameObject mainMenu;                 // The main menu that is displayed before starting the game.
     public GameObject pauseMenu;                // The pause menu that is displayed when Escape is pressed.
-    public GameObject optionsMenu;              // The options menu displayed when 'Options' is clicked.
+    public GameObject optionsMenu;              // The options menu that is displayed when 'Options' is clicked.
+    public GameObject gameOverMenu;             // The game over menu that is displayed when the player dies.
     public GameObject startText;                // The text informing the player to press a button to continue.
     public GameObject crosshair;                // The crosshair respresenting the centre of the screen.
 
@@ -68,7 +69,7 @@ public class UIController : MonoBehaviour
     /* Starts the game. */
     public void PlayGame()
     {
-        sceneController.AfterSceneLoad += MainMenuToGameScene;
+        SceneController.AfterSceneLoad += MenuToGameScene;
         sceneController.FadeAndLoadScene("MeteorStrike");
     }
 
@@ -96,7 +97,7 @@ public class UIController : MonoBehaviour
     public void ReturnToMainMenu()
     {
         Time.timeScale = 1.0f;
-        sceneController.AfterSceneLoad += GameSceneToMainMenu;
+        SceneController.AfterSceneLoad += GameSceneToMainMenu;
         sceneController.FadeAndLoadScene("SplashScreen");
     }
 
@@ -109,13 +110,14 @@ public class UIController : MonoBehaviour
         UnityEditor.EditorApplication.isPlaying = false;
     }
 
-    /* Called after loading a new scene from the main menu. */
-    private void MainMenuToGameScene()
+    /* Called after loading a new scene from the main or game over menu. */
+    private void MenuToGameScene()
     {
-        HideMenu(mainMenu);
+        HideMenu(openMenu);
         Cursor.lockState = CursorLockMode.Locked;
         crosshair.SetActive(true);
-        sceneController.AfterSceneLoad -= MainMenuToGameScene;
+        PlayerCharacter.OnPlayerDeath += GameOver;
+        SceneController.AfterSceneLoad -= MenuToGameScene;
     }
 
     /* Called after loading the main menu from a game scene. */
@@ -125,6 +127,17 @@ public class UIController : MonoBehaviour
         ShowMenu(mainMenu);
         Cursor.lockState = CursorLockMode.None;
         crosshair.SetActive(false);
-        sceneController.AfterSceneLoad -= GameSceneToMainMenu;
+        SceneController.AfterSceneLoad -= GameSceneToMainMenu;
+    }
+
+    /* Called when the player dies to display the game over menu. */
+    private void GameOver()
+    {
+        Time.timeScale = 0.0f;
+        isPaused = true;
+        ShowMenu(gameOverMenu);
+        Cursor.lockState = CursorLockMode.None;
+        crosshair.SetActive(false);
+        PlayerCharacter.OnPlayerDeath -= GameOver;
     }
 }

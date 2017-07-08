@@ -6,8 +6,8 @@ using UnityEngine.SceneManagement;
 
 public class SceneController : MonoBehaviour
 {
-    public event Action BeforeSceneUnload;                  // Event delegate that is called just before a scene is unloaded.
-    public event Action AfterSceneLoad;                     // Event delegate that is called just after a scene is loaded.
+    public static event Action BeforeSceneUnload;           // Event delegate that is called just before a scene is unloaded.
+    public static event Action AfterSceneLoad;              // Event delegate that is called just after a scene is loaded.
 
     public CanvasGroup faderCanvasGroup;                    // The canvas group that controls the Image used for scene fades.
     public float fadeDuration = 1.0f;                       // How long it will take for the scene to fade to or from black.
