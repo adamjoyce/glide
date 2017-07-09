@@ -14,6 +14,7 @@ public class UIController : MonoBehaviour
     public GameObject crosshair;                // The crosshair respresenting the centre of the screen.
 
     private bool isPaused = false;              // Whether or not the game is currently paused.
+    private bool returningToMainMenu = false;   // Whether or not the game is returning to the main menu.
     private GameObject openMenu;                // The menu that is currently open.
     private GameObject previousMenu;            // The menu that was open before the current one.
 
@@ -26,10 +27,13 @@ public class UIController : MonoBehaviour
     /* Update is called once per frame. */
     void Update()
     {
-        if (startText.activeInHierarchy && Input.anyKeyDown)
+        if (sceneController.GetActiveSceneIndex() <= 1)
         {
-            startText.SetActive(false);
-            ShowMenu(mainMenu);
+            if (startText.activeInHierarchy && Input.anyKeyDown)
+            {
+                startText.SetActive(false);
+                ShowMenu(mainMenu);
+            }
         }
         else if (Input.GetKeyDown(KeyCode.Escape) || Input.GetKeyDown(KeyCode.P))
         {
@@ -62,6 +66,7 @@ public class UIController : MonoBehaviour
     /* Returns to the previous menu. */
     public void BackToMenu()
     {
+        AttemptPlayerPrefUpdate();
         HideMenu(openMenu);
         ShowMenu(previousMenu);
     }
@@ -93,6 +98,7 @@ public class UIController : MonoBehaviour
     public void ResumeGame()
     {
         Time.timeScale = 1.0f;
+        AttemptPlayerPrefUpdate();
         HideMenu(openMenu);
         isPaused = false;
         crosshair.SetActive(true);
@@ -103,6 +109,7 @@ public class UIController : MonoBehaviour
     public void ReturnToMainMenu()
     {
         Time.timeScale = 1.0f;
+        returningToMainMenu = true;
         SceneController.AfterSceneLoad += GameSceneToMainMenu;
         sceneController.FadeAndLoadScene("SplashScreen");
     }
@@ -122,6 +129,8 @@ public class UIController : MonoBehaviour
         HideMenu(openMenu);
         Cursor.lockState = CursorLockMode.Locked;
         crosshair.SetActive(true);
+        Options.SetPlayerController();
+        Options.ApplyPlayerPrefs();
         PlayerCharacter.OnPlayerDeath += GameOver;
         SceneController.AfterSceneLoad -= MenuToGameScene;
     }
@@ -133,17 +142,31 @@ public class UIController : MonoBehaviour
         ShowMenu(mainMenu);
         Cursor.lockState = CursorLockMode.None;
         crosshair.SetActive(false);
+        returningToMainMenu = false;
         SceneController.AfterSceneLoad -= GameSceneToMainMenu;
     }
 
     /* Called when the player dies to display the game over menu. */
     private void GameOver()
     {
-        Time.timeScale = 0.0f;
-        isPaused = true;
-        ShowMenu(gameOverMenu);
-        Cursor.lockState = CursorLockMode.None;
-        crosshair.SetActive(false);
-        PlayerCharacter.OnPlayerDeath -= GameOver;
+        if (!returningToMainMenu)
+        {
+            Time.timeScale = 0.0f;
+            isPaused = true;
+            ShowMenu(gameOverMenu);
+            Cursor.lockState = CursorLockMode.None;
+            crosshair.SetActive(false);
+            PlayerCharacter.OnPlayerDeath -= GameOver;
+        }
+    }
+
+    /* Apply any changes to the player prefs. */
+    private void AttemptPlayerPrefUpdate()
+    {
+        if ((sceneController.GetActiveSceneIndex() > 1) && openMenu.name == "OptionsMenu")
+        {
+            // Returning from the options menu and we are in an active game scene so apply player prefs.
+            Options.ApplyPlayerPrefs();
+        }
     }
 }

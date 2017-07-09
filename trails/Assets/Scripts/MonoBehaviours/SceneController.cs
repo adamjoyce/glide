@@ -37,6 +37,12 @@ public class SceneController : MonoBehaviour
         }
     }
 
+    /* Returns the currently active scene build index. */
+    public int GetActiveSceneIndex()
+    {
+        return SceneManager.GetActiveScene().buildIndex;
+    }
+
     /* Handles a complete scene transition including any actions immediately before or after the change occurs. */
     private IEnumerator FadeAndSwitchScenes(string sceneName)
     {
