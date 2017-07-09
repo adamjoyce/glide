@@ -9,6 +9,12 @@ public class Options : MonoBehaviour
 
     private static PlayerController playerController;      // The controller attached to the player in the game scene.
 
+    /* Use for initilisation. */
+    private void Start()
+    {
+        sensitivity.value = PlayerPrefs.GetFloat("MouseSensitivity");
+    }
+
     /* Sets the player controller in a game scene. */
     public static void SetPlayerController()
     {
