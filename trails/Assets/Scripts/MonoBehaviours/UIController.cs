@@ -129,6 +129,7 @@ public class UIController : MonoBehaviour
         HideMenu(openMenu);
         Cursor.lockState = CursorLockMode.Locked;
         crosshair.SetActive(true);
+
         Options.SetPlayerController();
         Options.ApplyPlayerPrefs();
         PlayerCharacter.OnPlayerDeath += GameOver;
