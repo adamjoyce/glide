@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class Meteor : MonoBehaviour, IDamageable<float>, IKillable
 {
+    public MeteorManager meteorManager;     // The script that manages the active meteors.
     public GameObject impactZone;           // The centre of the area the meteor will aim towards.
     public float movementSpeed = 5.0f;      // The speed the meteor will travel at.
     public float maximumHealth = 100.0f;    // The starting health of a meteor.
@@ -15,11 +16,9 @@ public class Meteor : MonoBehaviour, IDamageable<float>, IKillable
     /* Use this for initialization. */
     private void Start()
     {
-        // Attempt to get a reference to the impact zone if it is not set.
-        if (!impactZone)
-        {
-            impactZone = GameObject.Find("ImpactZone");
-        }
+        // Fetch references if not set.
+        if (!meteorManager) { meteorManager = GameObject.Find("MeteorManager").GetComponent<MeteorManager>(); }
+        if (!impactZone) { impactZone = GameObject.Find("ImpactZone"); }
 
         // Generate the target location within the impact zone and face the meteor towards it.
         targetImpactLocation = RandomPointInZone.GetRandomPointInZone(impactZone);
@@ -46,6 +45,7 @@ public class Meteor : MonoBehaviour, IDamageable<float>, IKillable
 
     public void Die()
     {
+        meteorManager.RemoveMeteor(gameObject);
         Destroy(gameObject);
     }
 
