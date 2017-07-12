@@ -51,13 +51,13 @@ public class IndicatorController : MonoBehaviour
         if (currentTargetIndicatorIndex < targetIndicators.Count)
         {
             // Use the existing target indicator.
-            targetIndicator = targetIndicators[currentArrowIndicatorIndex];
+            targetIndicator = targetIndicators[currentTargetIndicatorIndex];
         }
         else
         {
             // Create a new target indicator.
             targetIndicator = Instantiate(targetIndicatorPrefab);
-            targetIndicator.transform.parent = transform;
+            targetIndicator.transform.SetParent(transform);
             targetIndicators.Add(targetIndicator);
         }
 
