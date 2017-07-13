@@ -6,6 +6,7 @@ public class Meteor : MonoBehaviour, IDamageable<float>, IKillable
 {
     public MeteorManager meteorManager;     // The script that manages the active meteors.
     public GameObject impactZone;           // The centre of the area the meteor will aim towards.
+    public GameObject deathExplosion;       // The explosion that will be played when the meteor dies.
     public float movementSpeed = 5.0f;      // The speed the meteor will travel at.
     public float maximumHealth = 100.0f;    // The starting health of a meteor.
 
@@ -19,6 +20,7 @@ public class Meteor : MonoBehaviour, IDamageable<float>, IKillable
         // Fetch references if not set.
         if (!meteorManager) { meteorManager = GameObject.Find("MeteorManager").GetComponent<MeteorManager>(); }
         if (!impactZone) { impactZone = GameObject.Find("ImpactZone"); }
+        if (!deathExplosion) { deathExplosion = GameObject.Find("MeteorProjectileExplosion"); }
 
         // Generate the target location within the impact zone and face the meteor towards it.
         targetImpactLocation = RandomPointInZone.GetRandomPointInZone(impactZone);
@@ -45,8 +47,12 @@ public class Meteor : MonoBehaviour, IDamageable<float>, IKillable
 
     public void Die()
     {
+        // Play the explosion.
+        GameObject explosion = Instantiate(deathExplosion, transform.position, Quaternion.identity);
+        explosion.transform.GetChild(0).gameObject.SetActive(true);
         meteorManager.RemoveMeteor(gameObject);
         Destroy(gameObject);
+        Destroy(explosion, 2.0f);
     }
 
     /* What happens when something collides with this object. */
