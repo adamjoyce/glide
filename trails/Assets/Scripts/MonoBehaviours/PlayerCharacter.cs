@@ -54,7 +54,8 @@ public class PlayerCharacter : MonoBehaviour, IDamageable<float>, IKillable
     /* Called when the player's health reaches zero. */
     public void Die()
     {
-        OnPlayerDeath();
+        if (OnPlayerDeath != null)
+            OnPlayerDeath();
     }
 
     /* Returns the players current health value. */
