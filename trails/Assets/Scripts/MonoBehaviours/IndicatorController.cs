@@ -9,12 +9,22 @@ public class IndicatorController : MonoBehaviour
     public GameObject targetIndicatorPrefab;                                     // The prefab for the target UI GameObject element displayed when the object is on-screen.
     public GameObject arrowIndicatorPrefab;                                      // The prefab for the arrow UI GameObject element displayed when the object is off-screen.
 
-    [SerializeField]
     private List<GameObject> targetIndicators = new List<GameObject>();          // The pool of target indicators.
     private List<GameObject> arrowIndicators = new List<GameObject>();           // The pool of arrow indicators.
-    [SerializeField]
     private int currentTargetIndicatorIndex = 0;                                 // The first unassigned target indicator.
     private int currentArrowIndicatorIndex = 0;                                  // The first unassigned arrow indicator.
+
+    private GameObject spawnZone;                                                // Object spawn zone to determine maximum distance from the player for arrow scaling.
+    private BoxCollider spawnZoneCollider;                                       // The collider for the spawn zone.
+    private const float arrowScaleMultipler = 5;                                 // The multipler for arrow scaling.
+
+    /* Use for intialisation. */
+    private void Start()
+    {
+        spawnZone = GameObject.Find("SpawnZone");
+        if (spawnZone)
+            spawnZoneCollider = spawnZone.GetComponent<BoxCollider>();
+    }
 
     /* Update is called once per frame after Update functions have been called. */
     private void LateUpdate()
@@ -42,6 +52,11 @@ public class IndicatorController : MonoBehaviour
             else
             {
                 // The object is loacted off-screen.
+                // Flips the screen position of objects when they are behind the camera.
+                //if (screenPos.z < 0)
+                //{
+                //    screenPos *= -1;
+                //}
 
                 // Translate screen coordinates to make the screen centre the origin.
                 Vector3 screenOrigin = new Vector3(Screen.width, Screen.height, 0) * 0.5f;
@@ -50,10 +65,10 @@ public class IndicatorController : MonoBehaviour
                 // Find the angle from the origin to the mouse position.
                 float angle = Mathf.Atan2(screenPos.y, screenPos.x);
                 angle -= 90 * Mathf.Deg2Rad;
-                float angleSin = Mathf.Sin(angle);
+                float angleSin = -Mathf.Sin(angle);
                 float angleCos = Mathf.Cos(angle);
 
-                screenPos = screenOrigin + new Vector3(angleSin, angleCos, 0);
+                //screenPos = screenOrigin + new Vector3(angleSin * 180, angleCos * 180, 0);
 
                 // Using the slope intercept (y = mx + b).
                 float gradient = angleCos / angleSin;
@@ -92,6 +107,7 @@ public class IndicatorController : MonoBehaviour
                 GameObject arrowIndicator = GetArrowIndicator();
                 arrowIndicator.transform.position = screenPos;
                 arrowIndicator.transform.rotation = Quaternion.Euler(0, 0, angle * Mathf.Rad2Deg);
+                ScaleArrow(meteors[i], ref arrowIndicator);
             }
         }
 
@@ -165,5 +181,14 @@ public class IndicatorController : MonoBehaviour
             arrowIndicators.Remove(arrowIndicator);
             Destroy(arrowIndicator);
         }
+    }
+
+    /* Scales the arrow indicator based on object distance to player. */
+    private void ScaleArrow(GameObject obj, ref GameObject arrowIndicator)
+    {
+        float distance = (Camera.main.transform.position - obj.transform.position).magnitude;
+        float distanceNorm = distance / (spawnZone.transform.position.z + (spawnZoneCollider.size.z * 0.5f));
+        float scaleValue = (1 - distanceNorm) * arrowScaleMultipler;
+        arrowIndicator.transform.localScale = new Vector3(scaleValue, scaleValue, 0);
     }
 }
