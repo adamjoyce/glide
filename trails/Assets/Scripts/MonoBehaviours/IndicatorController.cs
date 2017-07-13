@@ -14,7 +14,7 @@ public class IndicatorController : MonoBehaviour
     private int currentTargetIndicatorIndex = 0;                                 // The first unassigned target indicator.
     private int currentArrowIndicatorIndex = 0;                                  // The first unassigned arrow indicator.
 
-    private GameObject spawnZone;                                                // Object spawn zone to determine maximum distance from the player for arrow scaling.
+    private GameObject spawnZone;                                                // The object spawn zone to determine maximum distance from the player for arrow scaling.
     private BoxCollider spawnZoneCollider;                                       // The collider for the spawn zone.
     private const float arrowScaleMultipler = 5;                                 // The multipler for arrow scaling.
 
@@ -52,11 +52,11 @@ public class IndicatorController : MonoBehaviour
             else
             {
                 // The object is loacted off-screen.
-                // Flips the screen position of objects when they are behind the camera.
-                //if (screenPos.z < 0)
-                //{
-                //    screenPos *= -1;
-                //}
+                //Flips the screen position of objects when they are behind the camera.
+                if (screenPos.z < 0)
+                {
+                    screenPos *= -1;
+                }
 
                 // Translate screen coordinates to make the screen centre the origin.
                 Vector3 screenOrigin = new Vector3(Screen.width, Screen.height, 0) * 0.5f;
@@ -186,9 +186,13 @@ public class IndicatorController : MonoBehaviour
     /* Scales the arrow indicator based on object distance to player. */
     private void ScaleArrow(GameObject obj, ref GameObject arrowIndicator)
     {
-        float distance = (Camera.main.transform.position - obj.transform.position).magnitude;
-        float distanceNorm = distance / (spawnZone.transform.position.z + (spawnZoneCollider.size.z * 0.5f));
-        float scaleValue = (1 - distanceNorm) * arrowScaleMultipler;
-        arrowIndicator.transform.localScale = new Vector3(scaleValue, scaleValue, 0);
+        // Scale the arrows if the spawn zone has been found.
+        if (spawnZone)
+        {
+            float distance = (Camera.main.transform.position - obj.transform.position).magnitude;
+            float distanceNorm = distance / (spawnZone.transform.position.z + (spawnZoneCollider.size.z * 0.5f));
+            float scaleValue = (1 - distanceNorm) * arrowScaleMultipler;
+            arrowIndicator.transform.localScale = new Vector3(scaleValue, scaleValue, 0);
+        }
     }
 }
