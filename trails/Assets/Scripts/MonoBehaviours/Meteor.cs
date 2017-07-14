@@ -20,7 +20,7 @@ public class Meteor : MonoBehaviour, IDamageable<float>, IKillable
         // Fetch references if not set.
         if (!meteorManager) { meteorManager = GameObject.Find("MeteorManager").GetComponent<MeteorManager>(); }
         if (!impactZone) { impactZone = GameObject.Find("ImpactZone"); }
-        if (!deathExplosion) { deathExplosion = GameObject.Find("MeteorProjectileExplosion"); }
+        if (!deathExplosion) { deathExplosion = GameObject.Find("MeteorExplosion"); }
 
         // Generate the target location within the impact zone and face the meteor towards it.
         targetImpactLocation = RandomPointInZone.GetRandomPointInZone(impactZone);
@@ -50,18 +50,20 @@ public class Meteor : MonoBehaviour, IDamageable<float>, IKillable
         // Play the explosion.
         GameObject explosion = Instantiate(deathExplosion, transform.position, Quaternion.identity);
         explosion.transform.GetChild(0).gameObject.SetActive(true);
+
+        // Update the active meteor list for indicator recycling.
         meteorManager.RemoveMeteor(gameObject);
+
         Destroy(gameObject);
-        Destroy(explosion, 2.0f);
+        Destroy(explosion, 0.5f);
     }
 
     /* What happens when something collides with this object. */
     private void OnTriggerEnter(Collider other)
     {
-        if (other.tag == "Cannonball")
+        if (other.tag == "Wisp")
         {
-            Destroy(other.gameObject);
-            Die();
+            TakeDamage(maximumHealth);
         }
     }
 }
