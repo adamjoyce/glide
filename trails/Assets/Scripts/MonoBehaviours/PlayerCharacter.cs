@@ -9,7 +9,7 @@ public class PlayerCharacter : MonoBehaviour, IDamageable<float>, IKillable
 
     public float maximumHealth = 100.0f;        // The starting health point cap of the character.
 
-    public GameObject cannonBall;               // The gameobject that will be fired when space is pressed.
+    public GameObject wispProjectile;           // The gameobject that will be fired when the fire key is pressed.
     public GameObject cannon;                   // The gameobject the projectiles will originate from.
     public float shootForce = 0.0f;             // The initial force applied to the cannonball.
     public float shotDelay = 1.0f;              // The time that needs to pass before another shot can be taken.
@@ -34,7 +34,7 @@ public class PlayerCharacter : MonoBehaviour, IDamageable<float>, IKillable
     {
         if ((Time.time >= nextFireTime) && Input.GetKeyDown(KeyCode.Space))
         {
-            FireCannonball();
+            FireProjectile(wispProjectile);
 
             // Update when the cannon can next fire.
             nextFireTime = Time.time + shotDelay;
@@ -65,9 +65,9 @@ public class PlayerCharacter : MonoBehaviour, IDamageable<float>, IKillable
     }
 
     /* Spawns and fires a cannonball. */
-    private void FireCannonball()
+    private void FireProjectile(GameObject projectileToFire)
     {
-        GameObject projectile = Instantiate(cannonBall, cannon.transform.position, transform.rotation);
+        GameObject projectile = Instantiate(projectileToFire, cannon.transform.position, transform.rotation);
         projectile.GetComponent<Rigidbody>().AddForce(projectile.transform.forward * shootForce);
     }
 }

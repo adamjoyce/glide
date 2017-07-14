@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class CannonBall : MonoBehaviour
+public class WispProjectile : MonoBehaviour
 {
-    public float destructionDelay = 5.0f;           // The amount of time in seconds before the cannonball self-destructs.
+    public float destructionDelay = 5.0f;           // The amount of time in seconds before the projectile self-destructs.
 
     /* Use this for initialization. */
     void Start()
