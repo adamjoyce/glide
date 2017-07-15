@@ -6,11 +6,11 @@ using UnityEngine.UI;
 public class Timer : MonoBehaviour
 {
     public GameObject meteorManager;                    // The object that managers the meteor spawns.
+    public int difficultyInterval = 20;                 // The amount of time before the difficulty is increased.
 
     private Text timer;                                 // The timer that displays how much time has passed.
     private Animator anim;                              // The animator for the difficulty scaling effect.
     private float nextDifficultyIncrease = 0.0f;        // The next time stamp (from the beginning of the scene) a diffuclty increase will occur. 
-    private int difficultyInterval = 10;                // The amount of time before the difficulty is increased.
 
     /* Use this for initialization. */
     void Start()
@@ -30,9 +30,12 @@ public class Timer : MonoBehaviour
         // Check if enough time has passed to increase the difficulty.
         if (Time.timeSinceLevelLoad >= nextDifficultyIncrease)
         {
-            meteorManager.GetComponent<MeteorManager>().IncreaseDifficulty();
-            anim.SetTrigger("DifficultyIncrease");
-            nextDifficultyIncrease = Time.timeSinceLevelLoad + difficultyInterval;
+            bool difficultyIncreased = meteorManager.GetComponent<MeteorManager>().IncreaseDifficulty();
+            if (difficultyIncreased)
+            {
+                anim.SetTrigger("DifficultyIncrease");
+                nextDifficultyIncrease = Time.timeSinceLevelLoad + difficultyInterval;
+            }
         }
 
         // Update the on-screen timer.
