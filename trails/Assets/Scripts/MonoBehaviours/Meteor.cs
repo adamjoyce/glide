@@ -49,13 +49,16 @@ public class Meteor : MonoBehaviour, IDamageable<float>, IKillable
     {
         // Play the explosion.
         GameObject explosion = Instantiate(deathExplosion, transform.position, Quaternion.identity);
+        AudioSource audio = explosion.GetComponent<AudioSource>();
         explosion.transform.GetChild(0).gameObject.SetActive(true);
+        audio.Play();
+        
 
         // Update the active meteor list for indicator recycling.
         meteorManager.RemoveMeteor(gameObject);
 
         Destroy(gameObject);
-        Destroy(explosion, 0.5f);
+        Destroy(explosion, audio.clip.length);
     }
 
     /* What happens when something collides with this object. */
