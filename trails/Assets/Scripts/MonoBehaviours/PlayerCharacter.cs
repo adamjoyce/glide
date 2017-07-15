@@ -21,7 +21,6 @@ public class PlayerCharacter : MonoBehaviour, IDamageable<float>, IKillable
 
     private float currentHealth = 0.0f;                                     // The current health points of the character at any given stage in tha game.
     private float nextFireTime = 0.0f;                                      // The next time increment at which another cannonball may be fired.
-    private bool damaged = false;                                           // Used to decide when to fade the damage image back to clear.
 
     public float CurrentHealth
     {
@@ -38,6 +37,7 @@ public class PlayerCharacter : MonoBehaviour, IDamageable<float>, IKillable
     /* Update is called once per frame. */
     private void Update()
     {
+        // Fire projectile.
         if ((Time.time >= nextFireTime) && Input.GetKeyDown(KeyCode.Space))
         {
             FireProjectile(wispProjectile);
@@ -45,17 +45,26 @@ public class PlayerCharacter : MonoBehaviour, IDamageable<float>, IKillable
             // Update when the cannon can next fire.
             nextFireTime = Time.time + shotDelay;
         }
+
+        // Fades damage image.
+        if (damageImage.color != Color.clear)
+        {
+            damageImage.color = Color.Lerp(damageImage.color, Color.clear, flashSpeed * Time.deltaTime);
+        }
     }
 
     /* Dies if the damage taken reduces hits point to or below zero. */
     public void TakeDamage(float damageAmount)
     {
-        damageImage.color = damageFlashColor;
+        // Update health and check for death.
         currentHealth -= damageAmount;
         if (currentHealth <= 0)
         {
             Die();
         }
+
+        // Flash damage feedback image.
+        damageImage.color = damageFlashColor;
     }
 
     /* Called when the player's health reaches zero. */
