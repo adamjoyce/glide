@@ -2,20 +2,26 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class PlayerCharacter : MonoBehaviour, IDamageable<float>, IKillable
 {
-    public static event Action OnPlayerDeath;   // Event delegate that is called when the player dies.
+    public static event Action OnPlayerDeath;                               // Event delegate that is called when the player dies.
 
-    public float maximumHealth = 100.0f;        // The starting health point cap of the character.
+    public float maximumHealth = 100.0f;                                    // The starting health point cap of the character.
 
-    public GameObject wispProjectile;           // The gameobject that will be fired when the fire key is pressed.
-    public GameObject cannon;                   // The gameobject the projectiles will originate from.
-    public float shootForce = 0.0f;             // The initial force applied to the cannonball.
-    public float shotDelay = 1.0f;              // The time that needs to pass before another shot can be taken.
+    public GameObject wispProjectile;                                       // The gameobject that will be fired when the fire key is pressed.
+    public GameObject cannon;                                               // The gameobject the projectiles will originate from.
+    public float shootForce = 0.0f;                                         // The initial force applied to the cannonball.
+    public float shotDelay = 1.0f;                                          // The time that needs to pass before another shot can be taken.
 
-    private float currentHealth = 0.0f;         // The current health points of the character at any given stage in tha game.
-    private float nextFireTime = 0.0f;          // The next time increment at which another cannonball may be fired.
+    public Image damageImage;                                               // The image that flashes when damage is sustained.
+    public Color damageFlashColor = new Color(1.0f, 0.0f, 0.0f, 0.75f);     // The colour that the damage image flashes when damage is taken.
+    public float flashSpeed = 5.0f;                                         // The speed at which the damage image will fade.
+
+    private float currentHealth = 0.0f;                                     // The current health points of the character at any given stage in tha game.
+    private float nextFireTime = 0.0f;                                      // The next time increment at which another cannonball may be fired.
+    private bool damaged = false;                                           // Used to decide when to fade the damage image back to clear.
 
     public float CurrentHealth
     {
@@ -44,6 +50,7 @@ public class PlayerCharacter : MonoBehaviour, IDamageable<float>, IKillable
     /* Dies if the damage taken reduces hits point to or below zero. */
     public void TakeDamage(float damageAmount)
     {
+        damageImage.color = damageFlashColor;
         currentHealth -= damageAmount;
         if (currentHealth <= 0)
         {
