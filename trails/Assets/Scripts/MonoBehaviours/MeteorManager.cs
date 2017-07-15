@@ -6,11 +6,13 @@ public class MeteorManager : MonoBehaviour
 {
     public GameObject meteor;                                       // The meteor prefab that will be spawned.
     public GameObject spawnZone;                                    // The area in which the meteors are able to spawn.
-    public float spawnRate = 5.0f;                                  // The starting rate for how often meteors will spawn - every x seconds.
+    public float spawnInterval = 5.0f;                              // The starting rate for how often meteors will spawn - every x seconds.
+    public float difficultyIncrement = 0.25f;                       // The amount the spawnInterval decreases after a certain time has passed.
 
     [SerializeField]
     private List<GameObject> meteors = new List<GameObject>();      // The list of all active meteors.
     private float nextSpawnTime = 0.0f;                             // The next timestamp (from the beginning of the game) a meteor will be spawned.
+    private float minimunSpawnInterval = 0.5f;                      // The minimum amount fo time between meteor spawns.
 
     /* Use this for initialization. */
     private void Start()
@@ -26,7 +28,7 @@ public class MeteorManager : MonoBehaviour
         {
             GameObject newMeteor = Instantiate(meteor, RandomPointInZone.GetRandomPointInZone(spawnZone), Quaternion.identity);
             meteors.Add(newMeteor);
-            nextSpawnTime = Time.time + spawnRate;
+            nextSpawnTime = Time.time + spawnInterval;
         }
     }
 
@@ -40,5 +42,12 @@ public class MeteorManager : MonoBehaviour
     public void RemoveMeteor(GameObject meteorToRemove)
     {
         meteors.Remove(meteorToRemove);
+    }
+
+    /* Reduces the spawn interval by the difficulty increment. */
+    public void IncreaseDifficulty()
+    {
+        if (spawnInterval > minimunSpawnInterval)
+            spawnInterval -= difficultyIncrement;
     }
 }
