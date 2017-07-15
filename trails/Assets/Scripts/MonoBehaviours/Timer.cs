@@ -36,7 +36,6 @@ public class Timer : MonoBehaviour
     {
         // Check if enough time has passed to increase the difficulty.
         float timer = Time.time - startTime;
-        Debug.Log(timer);
         if (timer >= nextDifficultyIncrease)
         {
             bool difficultyIncreased = meteorManager.GetComponent<MeteorManager>().IncreaseDifficulty();
