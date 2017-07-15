@@ -8,6 +8,7 @@ public class Timer : MonoBehaviour
     public GameObject meteorManager;                    // The object that managers the meteor spawns.
 
     private Text timer;                                 // The timer that displays how much time has passed.
+    private Animator anim;                              // The animator for the difficulty scaling effect.
     private float nextDifficultyIncrease = 0.0f;        // The next time stamp (from the beginning of the scene) a diffuclty increase will occur. 
     private int difficultyInterval = 10;                // The amount of time before the difficulty is increased.
 
@@ -15,6 +16,7 @@ public class Timer : MonoBehaviour
     void Start()
     {
         timer = GetComponent<Text>();
+        anim = GetComponent<Animator>();
 
         if (!meteorManager)
             meteorManager = GameObject.Find("MeteorManager");
@@ -29,6 +31,7 @@ public class Timer : MonoBehaviour
         if (Time.timeSinceLevelLoad >= nextDifficultyIncrease)
         {
             meteorManager.GetComponent<MeteorManager>().IncreaseDifficulty();
+            anim.SetTrigger("DifficultyIncrease");
             nextDifficultyIncrease = Time.timeSinceLevelLoad + difficultyInterval;
         }
 
