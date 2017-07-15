@@ -7,12 +7,13 @@ public class MeteorManager : MonoBehaviour
     public GameObject meteor;                                       // The meteor prefab that will be spawned.
     public GameObject spawnZone;                                    // The area in which the meteors are able to spawn.
     public float spawnInterval = 5.5f;                              // The starting rate for how often meteors will spawn - every x seconds.
+    public float minimunSpawnInterval = 1.5f;                       // The minimum amount fo time between meteor spawns.
     public float difficultyIncrement = 1.0f;                        // The amount the spawnInterval decreases after a certain time has passed.
+    public int difficultyInterval = 20;                             // The amount of time before the difficulty is increased.
 
     [SerializeField]
     private List<GameObject> meteors = new List<GameObject>();      // The list of all active meteors.
     private float nextSpawnTime = 0.0f;                             // The next timestamp (from the beginning of the game) a meteor will be spawned.
-    private float minimunSpawnInterval = 0.5f;                      // The minimum amount fo time between meteor spawns.
 
     /* Use this for initialization. */
     private void Start()
