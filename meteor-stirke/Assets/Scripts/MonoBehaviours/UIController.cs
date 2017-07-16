@@ -18,10 +18,13 @@ public class UIController : MonoBehaviour
     private GameObject openMenu;                // The menu that is currently open.
     private GameObject previousMenu;            // The menu that was open before the current one.
 
+    private AudioSource audio;                  // The audio source for playing UI menu audio.
+
     /* Use this for initialization. */
     void Start()
     {
         openMenu = mainMenu;
+        audio = GetComponent<AudioSource>();
     }
 
     /* Update is called once per frame. */
@@ -117,10 +120,13 @@ public class UIController : MonoBehaviour
     /* Quits the game. */
     public void QuitGame()
     {
-        Application.Quit();
+        StartCoroutine(QuitAfterTime());
+    }
 
-        // For exiting the editor.
-        UnityEditor.EditorApplication.isPlaying = false;
+    /* Play click audio. */
+    public void PlayClickAudio()
+    {
+        audio.Play();
     }
 
     /* Called after loading a new scene from the main or game over menu. */
@@ -169,5 +175,15 @@ public class UIController : MonoBehaviour
             // Returning from the options menu and we are in an active game scene so apply player prefs.
             Options.ApplyPlayerPrefs();
         }
+    }
+
+    /* Quits the game (or Editor) after a couple of seconds. */
+    private IEnumerator QuitAfterTime()
+    {
+        yield return new WaitForSeconds(0.5f);
+        Application.Quit();
+
+        // For exiting the editor.
+        UnityEditor.EditorApplication.isPlaying = false;
     }
 }
