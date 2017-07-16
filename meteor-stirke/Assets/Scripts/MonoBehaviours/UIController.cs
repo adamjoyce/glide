@@ -20,13 +20,15 @@ public class UIController : MonoBehaviour
     private GameObject openMenu;                // The menu that is currently open.
     private GameObject previousMenu;            // The menu that was open before the current one.
 
-    private AudioSource audio;                  // The audio source for playing UI menu audio.
+    private AudioSource audioUI;                  // The audio source for playing UI menu audio.
+    private AudioSource audioBackground;          // The audio source that controls the background track.
 
     /* Use this for initialization. */
     void Start()
     {
         openMenu = mainMenu;
-        audio = GetComponent<AudioSource>();
+        audioUI = GetComponent<AudioSource>();
+        SceneController.AfterSceneLoad += GetBackgroundAudio;
     }
 
     /* Update is called once per frame. */
@@ -36,6 +38,7 @@ public class UIController : MonoBehaviour
         {
             if (startText.activeInHierarchy && Input.anyKeyDown)
             {
+                PlaySceneChangeAudio();
                 startText.SetActive(false);
                 ShowMenu(mainMenu);
             }
@@ -128,13 +131,13 @@ public class UIController : MonoBehaviour
     /* Play click audio. */
     public void PlayClickAudio()
     {
-        audio.Play();
+        audioUI.Play();
     }
 
     /* Play scene change audio. */
     public void PlaySceneChangeAudio()
     {
-        audio.PlayOneShot(sceneChange);
+        audioUI.PlayOneShot(sceneChange);
     }
 
     /* Called after loading a new scene from the main or game over menu. */
@@ -171,6 +174,7 @@ public class UIController : MonoBehaviour
             ShowMenu(gameOverMenu);
             Cursor.lockState = CursorLockMode.None;
             crosshair.SetActive(false);
+            audioBackground.Stop();
             PlayerCharacter.OnPlayerDeath -= GameOver;
         }
     }
@@ -193,5 +197,11 @@ public class UIController : MonoBehaviour
 
         // For exiting the editor.
         UnityEditor.EditorApplication.isPlaying = false;
+    }
+
+    /* Gets the background audio source. */
+    private void GetBackgroundAudio()
+    {
+        audioBackground = GameObject.Find("BackgroundAudio").GetComponent<AudioSource>();
     }
 }
