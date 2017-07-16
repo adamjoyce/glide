@@ -5,6 +5,7 @@ using UnityEngine;
 public class UIController : MonoBehaviour
 {
     public SceneController sceneController;     // The scene controller which handles scene fades and switching.
+    public AudioController audioController;     // The audio controller which manges the game's audio levels.
     public GameObject background;               // The tinted background that is shown when a menu is open.
     public GameObject mainMenu;                 // The main menu that is displayed before starting the game.
     public GameObject pauseMenu;                // The pause menu that is displayed when Escape is pressed.
@@ -20,15 +21,12 @@ public class UIController : MonoBehaviour
     private GameObject openMenu;                // The menu that is currently open.
     private GameObject previousMenu;            // The menu that was open before the current one.
 
-    private AudioSource audioUI;                  // The audio source for playing UI menu audio.
-    private AudioSource audioBackground;          // The audio source that controls the background track.
-
     /* Use this for initialization. */
     void Start()
     {
+        if (!sceneController) { sceneController = GameObject.Find("SceneController").GetComponent<SceneController>(); }
+        if (!audioController) { audioController = GameObject.Find("AudioController").GetComponent<AudioController>(); }
         openMenu = mainMenu;
-        audioUI = GetComponent<AudioSource>();
-        SceneController.AfterSceneLoad += GetBackgroundAudio;
     }
 
     /* Update is called once per frame. */
@@ -131,13 +129,13 @@ public class UIController : MonoBehaviour
     /* Play click audio. */
     public void PlayClickAudio()
     {
-        audioUI.Play();
+        audioController.GetAudioUI().Play();
     }
 
     /* Play scene change audio. */
     public void PlaySceneChangeAudio()
     {
-        audioUI.PlayOneShot(sceneChange);
+        audioController.GetAudioUI().PlayOneShot(sceneChange);
     }
 
     /* Called after loading a new scene from the main or game over menu. */
@@ -148,6 +146,7 @@ public class UIController : MonoBehaviour
         crosshair.SetActive(true);
 
         Options.SetPlayerController();
+        Options.SetAudioController();
         Options.ApplyPlayerPrefs();
         PlayerCharacter.OnPlayerDeath += GameOver;
         SceneController.AfterSceneLoad -= MenuToGameScene;
@@ -174,7 +173,7 @@ public class UIController : MonoBehaviour
             ShowMenu(gameOverMenu);
             Cursor.lockState = CursorLockMode.None;
             crosshair.SetActive(false);
-            audioBackground.Stop();
+            audioController.GetAudioBackground().Stop();
             PlayerCharacter.OnPlayerDeath -= GameOver;
         }
     }
@@ -197,11 +196,5 @@ public class UIController : MonoBehaviour
 
         // For exiting the editor.
         UnityEditor.EditorApplication.isPlaying = false;
-    }
-
-    /* Gets the background audio source. */
-    private void GetBackgroundAudio()
-    {
-        audioBackground = GameObject.Find("BackgroundAudio").GetComponent<AudioSource>();
     }
 }

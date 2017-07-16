@@ -9,7 +9,7 @@ public class Timer : MonoBehaviour
 
     private Text timerText;                             // The timer UI element that displays how much time has passed.
     private Animator anim;                              // The animator for the difficulty scaling effect.
-    private AudioSource audio;                          // The audio source holding the difficulty increase effect.
+    private AudioSource audioTimer;                     // The audio source holding the difficulty increase effect.
     private float nextDifficultyIncrease = 0.0f;        // The next time stamp (from the beginning of the scene) a diffuclty increase will occur. 
     private float startTime = 0.0f;                     // The timestamp at which the level began.
     private int difficultyInterval = 0;                 // The amount of time before the difficulty is increased.
@@ -19,7 +19,7 @@ public class Timer : MonoBehaviour
     {
         timerText = GetComponent<Text>();
         anim = GetComponent<Animator>();
-        audio = GetComponent<AudioSource>();
+        audioTimer = GetComponent<AudioSource>();
 
         if (!meteorManager)
             meteorManager = GameObject.Find("MeteorManager");
@@ -44,7 +44,7 @@ public class Timer : MonoBehaviour
             if (difficultyIncreased)
             {
                 anim.SetTrigger("DifficultyIncrease");
-                audio.Play();
+                audioTimer.Play();
                 nextDifficultyIncrease = timer + difficultyInterval;
             }
         }
