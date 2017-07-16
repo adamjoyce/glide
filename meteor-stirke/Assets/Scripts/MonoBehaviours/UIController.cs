@@ -13,6 +13,8 @@ public class UIController : MonoBehaviour
     public GameObject startText;                // The text informing the player to press a button to continue.
     public GameObject crosshair;                // The crosshair respresenting the centre of the screen.
 
+    public AudioClip sceneChange;               // The audio that is played when the scene changes.
+
     private bool isPaused = false;              // Whether or not the game is currently paused.
     private bool returningToMainMenu = false;   // Whether or not the game is returning to the main menu.
     private GameObject openMenu;                // The menu that is currently open.
@@ -127,6 +129,12 @@ public class UIController : MonoBehaviour
     public void PlayClickAudio()
     {
         audio.Play();
+    }
+
+    /* Play scene change audio. */
+    public void PlaySceneChangeAudio()
+    {
+        audio.PlayOneShot(sceneChange);
     }
 
     /* Called after loading a new scene from the main or game over menu. */
