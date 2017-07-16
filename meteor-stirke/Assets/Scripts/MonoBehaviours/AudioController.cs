@@ -56,6 +56,7 @@ public class AudioController : MonoBehaviour
     {
         float normalisedVolume = NormaliseValue(volumeLevel, 0, 100);
         AudioListener.volume = normalisedVolume;
+        Debug.Log(normalisedVolume);
     }
 
     /* Sets the background music's volume level. */
@@ -63,7 +64,6 @@ public class AudioController : MonoBehaviour
     {
         float normalisedVolume = NormaliseValue(volumeLevel, 0, 100);
         audioBackground.volume = normalisedVolume;
-        Debug.Log(normalisedVolume);
     }
 
     /* Sets the initial background audio source after the splash screen scene is loaded. */
@@ -71,6 +71,8 @@ public class AudioController : MonoBehaviour
     {
         yield return new WaitUntil(() => SceneManager.GetActiveScene().buildIndex > 0);
         SetBackgroundAudio();
+
+        // Set the initial player pref volume here instead of Options.cs due to late loading.
         SetBackgroundVolume(PlayerPrefs.GetFloat("MusicVolume"));
     }
 

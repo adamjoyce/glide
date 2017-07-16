@@ -34,7 +34,8 @@ public class Options : MonoBehaviour
     {
         if (playerController)
             playerController.SetMouseSensitivity(PlayerPrefs.GetFloat("MouseSensitivity"));
-        //audioController.SetMasterVolume(PlayerPrefs.GetFloat("MasterVolume"));
+
+        audioController.SetMasterVolume(PlayerPrefs.GetFloat("MasterVolume"));
         audioController.SetBackgroundVolume(PlayerPrefs.GetFloat("MusicVolume"));
     }
 
@@ -48,12 +49,15 @@ public class Options : MonoBehaviour
     public void SetMasterVolume()
     {
         PlayerPrefs.SetFloat("MasterVolume", masterVolume.value);
+        audioController.SetMasterVolume(PlayerPrefs.GetFloat("MasterVolume"));
     }
 
     /* Sets the music volume as a player pref. */
     public void SetMusicVolume()
     {
         PlayerPrefs.SetFloat("MusicVolume", musicVolume.value);
+
+        // The initial background audio source may not have been set yet as it resides in the splash screen scene.
         if (audioController.HasBackgroundAudio())
             audioController.SetBackgroundVolume(PlayerPrefs.GetFloat("MusicVolume"));
     }

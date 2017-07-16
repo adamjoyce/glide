@@ -74,7 +74,6 @@ public class UIController : MonoBehaviour
     /* Returns to the previous menu. */
     public void BackToMenu()
     {
-        options.ApplyPlayerPrefs();
         HideMenu(openMenu);
         ShowMenu(previousMenu);
     }
