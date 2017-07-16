@@ -7,6 +7,7 @@ public class AudioController : MonoBehaviour
 {
     public AudioSource audioUI;                 // The audio source for the UI menu elements.
 
+    [SerializeField]
     private AudioSource audioBackground;        // The audio source for the background tracks.
 
     /* Use this for initialization. */
@@ -31,23 +32,17 @@ public class AudioController : MonoBehaviour
     }
 
     /* Returns the background audio source. */
-    public AudioSource GetAudioBackground()
+    public AudioSource GetBackgroundAudio()
     {
         return audioBackground;
     }
 
-    /* Sets the master volume level. */
-    public void SetMasterVolume(float volumeLevel)
+    /* Returns true id the background audio source has been referenced. */
+    public bool HasBackgroundAudio()
     {
-        float normalisedVolume = NormaliseValue(volumeLevel, 0, 1);
-        AudioListener.volume = normalisedVolume;
-    }
-
-    /* Sets the background music's volume level. */
-    public void SetBackgroundVolume(float volumeLevel)
-    {
-        float normalisedVolume = NormaliseValue(volumeLevel, 0, 1);
-        audioBackground.volume = volumeLevel;
+        if (!audioBackground)
+            return false;
+        return true;
     }
 
     /* Gets the background audio source. */
@@ -56,11 +51,27 @@ public class AudioController : MonoBehaviour
         audioBackground = GameObject.Find("BackgroundAudio").GetComponent<AudioSource>();
     }
 
+    /* Sets the master volume level. */
+    public void SetMasterVolume(float volumeLevel)
+    {
+        float normalisedVolume = NormaliseValue(volumeLevel, 0, 100);
+        AudioListener.volume = normalisedVolume;
+    }
+
+    /* Sets the background music's volume level. */
+    public void SetBackgroundVolume(float volumeLevel)
+    {
+        float normalisedVolume = NormaliseValue(volumeLevel, 0, 100);
+        audioBackground.volume = normalisedVolume;
+        Debug.Log(normalisedVolume);
+    }
+
     /* Sets the initial background audio source after the splash screen scene is loaded. */
     private IEnumerator SetAudioLate()
     {
         yield return new WaitUntil(() => SceneManager.GetActiveScene().buildIndex > 0);
-        if (!audioBackground) { SetBackgroundAudio(); }
+        SetBackgroundAudio();
+        SetBackgroundVolume(PlayerPrefs.GetFloat("MusicVolume"));
     }
 
     /* Normlises a given value to fall betwen min and max. */

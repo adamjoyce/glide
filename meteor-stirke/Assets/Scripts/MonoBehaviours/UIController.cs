@@ -5,7 +5,8 @@ using UnityEngine;
 public class UIController : MonoBehaviour
 {
     public SceneController sceneController;     // The scene controller which handles scene fades and switching.
-    public AudioController audioController;     // The audio controller which manges the game's audio levels.
+    public AudioController audioController;     // The audio controller which manages the game's audio levels.
+    public Options options;                     // The options script which manages the options values and player prefs.
     public GameObject background;               // The tinted background that is shown when a menu is open.
     public GameObject mainMenu;                 // The main menu that is displayed before starting the game.
     public GameObject pauseMenu;                // The pause menu that is displayed when Escape is pressed.
@@ -24,8 +25,9 @@ public class UIController : MonoBehaviour
     /* Use this for initialization. */
     void Start()
     {
-        if (!sceneController) { sceneController = GameObject.Find("SceneController").GetComponent<SceneController>(); }
-        if (!audioController) { audioController = GameObject.Find("AudioController").GetComponent<AudioController>(); }
+        if (!sceneController) { sceneController = FindObjectOfType<SceneController>(); }
+        if (!audioController) { audioController = FindObjectOfType<AudioController>(); }
+        if (!options) { options = FindObjectOfType<Options>(); }
         openMenu = mainMenu;
     }
 
@@ -72,7 +74,7 @@ public class UIController : MonoBehaviour
     /* Returns to the previous menu. */
     public void BackToMenu()
     {
-        AttemptPlayerPrefUpdate();
+        options.ApplyPlayerPrefs();
         HideMenu(openMenu);
         ShowMenu(previousMenu);
     }
@@ -145,9 +147,9 @@ public class UIController : MonoBehaviour
         Cursor.lockState = CursorLockMode.Locked;
         crosshair.SetActive(true);
 
-        Options.SetPlayerController();
-        Options.SetAudioController();
-        Options.ApplyPlayerPrefs();
+        options.SetPlayerController();
+        options.ApplyPlayerPrefs();
+
         PlayerCharacter.OnPlayerDeath += GameOver;
         SceneController.AfterSceneLoad -= MenuToGameScene;
     }
@@ -160,6 +162,7 @@ public class UIController : MonoBehaviour
         Cursor.lockState = CursorLockMode.None;
         crosshair.SetActive(false);
         returningToMainMenu = false;
+        options.ApplyPlayerPrefs();
         SceneController.AfterSceneLoad -= GameSceneToMainMenu;
     }
 
@@ -173,7 +176,7 @@ public class UIController : MonoBehaviour
             ShowMenu(gameOverMenu);
             Cursor.lockState = CursorLockMode.None;
             crosshair.SetActive(false);
-            audioController.GetAudioBackground().Stop();
+            audioController.GetBackgroundAudio().Stop();
             PlayerCharacter.OnPlayerDeath -= GameOver;
         }
     }
@@ -184,7 +187,7 @@ public class UIController : MonoBehaviour
         if ((sceneController.GetActiveSceneIndex() > 1) && openMenu.name == "OptionsMenu")
         {
             // Returning from the options menu and we are in an active game scene so apply player prefs.
-            Options.ApplyPlayerPrefs();
+            options.ApplyPlayerPrefs();
         }
     }
 
