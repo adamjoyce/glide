@@ -56,7 +56,6 @@ public class AudioController : MonoBehaviour
     {
         float normalisedVolume = NormaliseValue(volumeLevel, 0, 100);
         AudioListener.volume = normalisedVolume;
-        Debug.Log(normalisedVolume);
     }
 
     /* Sets the background music's volume level. */

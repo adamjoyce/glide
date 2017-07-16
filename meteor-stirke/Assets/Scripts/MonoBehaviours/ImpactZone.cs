@@ -23,7 +23,6 @@ public class ImpactZone : MonoBehaviour
         {
             player.TakeDamage(50.0f);
             other.GetComponent<Meteor>().TakeDamage(100.0f);
-            Debug.Log(player.GetHealth());
         }
     }
 }
