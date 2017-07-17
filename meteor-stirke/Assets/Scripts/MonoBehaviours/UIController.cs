@@ -74,6 +74,7 @@ public class UIController : MonoBehaviour
     /* Returns to the previous menu. */
     public void BackToMenu()
     {
+        AttemptPlayerPrefUpdate();
         HideMenu(openMenu);
         ShowMenu(previousMenu);
     }
@@ -197,6 +198,6 @@ public class UIController : MonoBehaviour
         Application.Quit();
 
         // For exiting the editor.
-        UnityEditor.EditorApplication.isPlaying = false;
+        //UnityEditor.EditorApplication.isPlaying = false;
     }
 }
