@@ -23,6 +23,11 @@ public class Options : MonoBehaviour
         musicVolume.value = PlayerPrefs.GetFloat("MusicVolume", 50);
     }
 
+    private void Update()
+    {
+        //PlayerPrefs.DeleteAll();
+    }
+
     /* Sets the player controller in a game scene. */
     public void SetPlayerController()
     {

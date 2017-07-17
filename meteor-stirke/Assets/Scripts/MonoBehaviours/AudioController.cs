@@ -72,7 +72,7 @@ public class AudioController : MonoBehaviour
         SetBackgroundAudio();
 
         // Set the initial player pref volume here instead of Options.cs due to late loading.
-        SetBackgroundVolume(PlayerPrefs.GetFloat("MusicVolume"));
+        SetBackgroundVolume(PlayerPrefs.GetFloat("MusicVolume", 50));
     }
 
     /* Normlises a given value to fall betwen min and max. */
