@@ -18,9 +18,9 @@ public class Options : MonoBehaviour
     private void Start()
     {
         audioController = FindObjectOfType<AudioController>();
-        sensitivity.value = PlayerPrefs.GetFloat("MouseSensitivity");
-        masterVolume.value = PlayerPrefs.GetFloat("MasterVolume");
-        musicVolume.value = PlayerPrefs.GetFloat("MusicVolume");
+        sensitivity.value = PlayerPrefs.GetFloat("MouseSensitivity", 1);
+        masterVolume.value = PlayerPrefs.GetFloat("MasterVolume", 100);
+        musicVolume.value = PlayerPrefs.GetFloat("MusicVolume", 50);
     }
 
     /* Sets the player controller in a game scene. */
