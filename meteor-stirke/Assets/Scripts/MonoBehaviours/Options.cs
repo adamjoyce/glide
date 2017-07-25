@@ -34,7 +34,6 @@ public class Options : MonoBehaviour
         masterVolume.value = PlayerPrefs.GetFloat("MasterVolume", defaultMasterVolume);
         musicVolume.value = PlayerPrefs.GetFloat("MusicVolume", defaultMusicVolume);
 
-        Debug.Log(PlayerPrefs.GetFloat("MasterVolume"));
         //PlayerPrefs.DeleteAll();
     }
 
