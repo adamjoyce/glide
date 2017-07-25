@@ -14,13 +14,28 @@ public class Options : MonoBehaviour
     [SerializeField]
     private AudioController audioController;            // The audio controller that manages the games audio.
 
+    private float defaultSensitivty = 1.0f;             // Default mouse sensivity value for first time setup.
+    private float defaultMasterVolume = 100.0f;         // Default master volume for first time setup.
+    private float defaultMusicVolume = 50.0f;           // Default music volume for first time setup.
+
     /* Use for initilisation. */
     private void Start()
     {
         audioController = FindObjectOfType<AudioController>();
-        sensitivity.value = PlayerPrefs.GetFloat("MouseSensitivity", 1);
-        masterVolume.value = PlayerPrefs.GetFloat("MasterVolume", 100);
-        musicVolume.value = PlayerPrefs.GetFloat("MusicVolume", 50);
+
+        if (!PlayerPrefs.HasKey("MouseSensitivity"))
+        {
+            // Set all player prefs as it is first time setup.
+            FirstPlayerPrefSetup();
+        }
+
+        // Player prefs should be set but left default values for redundancy.
+        sensitivity.value = PlayerPrefs.GetFloat("MouseSensitivity", defaultSensitivty);
+        masterVolume.value = PlayerPrefs.GetFloat("MasterVolume", defaultMasterVolume);
+        musicVolume.value = PlayerPrefs.GetFloat("MusicVolume", defaultMusicVolume);
+
+        Debug.Log(PlayerPrefs.GetFloat("MasterVolume"));
+        //PlayerPrefs.DeleteAll();
     }
 
     /* Sets the player controller in a game scene. */
@@ -60,5 +75,13 @@ public class Options : MonoBehaviour
         // The initial background audio source may not have been set yet as it resides in the splash screen scene.
         if (audioController.HasBackgroundAudio())
             audioController.SetBackgroundVolume(PlayerPrefs.GetFloat("MusicVolume"));
+    }
+
+    /* First time setup for player prefs. */
+    private void FirstPlayerPrefSetup()
+    {
+        PlayerPrefs.SetFloat("MouseSensitivity", defaultSensitivty);
+        PlayerPrefs.SetFloat("MasterVolume", defaultMasterVolume);
+        PlayerPrefs.SetFloat("MusicVolume", defaultMusicVolume);
     }
 }
