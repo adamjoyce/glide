@@ -18,6 +18,7 @@ public class UIController : MonoBehaviour
     public AudioClip sceneChange;               // The audio that is played when the scene changes.
 
     private bool isPaused = false;              // Whether or not the game is currently paused.
+    private bool gameOver = false;              // Has the player lost the game?
     private bool returningToMainMenu = false;   // Whether or not the game is returning to the main menu.
     private GameObject openMenu;                // The menu that is currently open.
     private GameObject previousMenu;            // The menu that was open before the current one.
@@ -34,25 +35,31 @@ public class UIController : MonoBehaviour
     /* Update is called once per frame. */
     void Update()
     {
-        if (sceneController.GetActiveSceneIndex() <= 1)
+        if (!gameOver)
         {
-            if (startText.activeInHierarchy && Input.anyKeyDown)
+            if (sceneController.GetActiveSceneIndex() <= 1)
             {
-                PlaySceneChangeAudio();
-                startText.SetActive(false);
-                ShowMenu(mainMenu);
+                // In first splash screen scene.
+                if (startText.activeInHierarchy && Input.anyKeyDown)
+                {
+                    // Show main menu.
+                    PlaySceneChangeAudio();
+                    startText.SetActive(false);
+                    ShowMenu(mainMenu);
+                }
             }
-        }
-        else if (Input.GetKeyDown(KeyCode.Escape) || Input.GetKeyDown(KeyCode.P))
-        {
-            if (!isPaused)
+            else if (Input.GetKeyDown(KeyCode.Escape) || Input.GetKeyDown(KeyCode.P))
             {
-                PauseGame();
-            }
-            else
-            {
-                ResumeGame();
-                openMenu = null;
+                // In game scene.
+                if (!isPaused)
+                {
+                    PauseGame();
+                }
+                else
+                {
+                    ResumeGame();
+                    openMenu = null;
+                }
             }
         }
     }
@@ -118,6 +125,7 @@ public class UIController : MonoBehaviour
     {
         Time.timeScale = 1.0f;
         returningToMainMenu = true;
+
         SceneController.AfterSceneLoad += GameSceneToMainMenu;
         sceneController.FadeAndLoadScene("SplashScreen");
     }
@@ -146,6 +154,7 @@ public class UIController : MonoBehaviour
         HideMenu(openMenu);
         Cursor.lockState = CursorLockMode.Locked;
         crosshair.SetActive(true);
+        gameOver = false;
 
         options.SetPlayerController();
         options.ApplyPlayerPrefs();
@@ -173,6 +182,7 @@ public class UIController : MonoBehaviour
         {
             Time.timeScale = 0.0f;
             isPaused = true;
+            gameOver = true;
             ShowMenu(gameOverMenu);
             Cursor.lockState = CursorLockMode.None;
             crosshair.SetActive(false);
