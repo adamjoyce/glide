@@ -34,7 +34,7 @@ public class Options : MonoBehaviour
         masterVolume.value = PlayerPrefs.GetFloat("MasterVolume", defaultMasterVolume);
         musicVolume.value = PlayerPrefs.GetFloat("MusicVolume", defaultMusicVolume);
 
-        //PlayerPrefs.DeleteAll();
+        ///PlayerPrefs.DeleteAll();
     }
 
     /* Sets the player controller in a game scene. */
